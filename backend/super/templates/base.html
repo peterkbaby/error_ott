@@ -1,0 +1,93 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  
+    <title>Bookmark Site</title>
+   
+</head>
+<style>
+    body{
+       
+        font-family: "Nunito", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+        
+        background-image: url('https://images.ctfassets.net/y2ske730sjqp/5QQ9SVIdc1tmkqrtFnG9U1/de758bba0f65dcc1c6bc1f31f161003d/BrandAssets_Logos_02-NSymbol.jpg?w=940');
+        background-attachment: fixed;
+        background-size: cover;
+        background-repeat:no-repeat;
+        
+        background-position: 0px 0px;
+        overflow-x: hidden;
+        
+      }
+</style>
+{% block style %}{% endblock style %}
+<body class=" text-light">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark  text-light">
+<div class="container">
+    <a class="navbar-brand" href="{% url 'landingpage' %}">
+        <span>NETFLIX</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+    {% if user.is_authenticated %}
+        <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url "currentvideos" %}">Movie List</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url "createvideo" %}">Upload a Movie</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url "currentplans" %}">Plans</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url "createplan" %}">Create a plan</a>
+                </li>
+
+        </ul>
+    {% endif %}
+    <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li>
+
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('signOutBtn').click();" class="nav-link">Logout from {{ user.username }}</a>
+
+                    <form style="display: none;" action="{% url 'logoutuser' %}" method="POST">
+                        {% csrf_token %}
+                        <button id="signOutBtn" type="submit">Logout</button>
+                    </form>
+
+                </li>
+            {% else %}
+                
+                
+            {% endif %}
+        </ul>
+    </div>
+</div>
+</nav>
+
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

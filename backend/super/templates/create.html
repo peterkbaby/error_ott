@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <h2>Upload new Video</h2>
+    </div>
+</div>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" name="title" class="form-control" id="title" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" class="form-control" id="description"></textarea>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select name="category" id="category" class="form-control">
+                       
+                     {% for key, value in form.fields.category.choices %}
+                        <option value="{{ key }}" {% if form.initial.category == key %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                    {% endfor %} 
+                </select>
+
+
+
+
+            </div>
+            <div class="form-group">
+                <label for="videoFile">Video File</label>
+                <input type="file" name="videoFile" class="form-control" id="videoFile" required>
+            </div>
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail</label>
+                <input type="file" name="thumbnail" class="form-control" id="thumbnail" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

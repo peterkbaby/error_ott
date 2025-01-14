@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-10">
+    {% if videos %}
+        <h1 style="text-align:center;">{{ videos.count }} Total Movie{{ videos.count|pluralize }}</h1>
+        {% else %}
+        <h1> Current Movie</h1>
+        {% endif %}
+    </div>
+</div>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-10">
+        {% if videos %}
+        <div class="list-group   list-group-dark">
+
+            {% for video in videos %}
+                
+                <h2>{{ video.id }}.{{ video.title }}</h2>
+                {{ video.get_category_display }}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    
+                    <a href="{% url "viewvideo" video.pk %}"> <button class="btn btn-warning me-md-2" type="button">Edit</button> </a>
+
+                  <form id="del-{{ video.pk }}" action="{% url "deletevideo" video.pk %}" method="POST" >
+                     {% csrf_token %}
+                     <button class="btn btn-danger ml-1" id="delete" type="button" onclick="confirmdelete({{ video.pk }})">Delete</button> 
+                    </form>
+                </div>
+                {% endfor %}
+                
+            </div>
+            <br>
+        {% else %}
+            <div class="text-center">
+                <h2>Look like you don't have any Movies. Add One</h2>
+                <br><a role="button" class="btn btn-primary" href="{% url 'createvideo' %}">New Movie</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function confirmdelete(videoPk) {
+        if (confirm("Are you sure you want to delete?")) {
+            document.getElementById('del-' + videoPk).submit();
+        } else {
+            return false;
+        }
+    }
+</script>
+    
+{% endblock %}

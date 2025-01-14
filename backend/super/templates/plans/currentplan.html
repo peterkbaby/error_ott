@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center;">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+        {% if plans %}
+            <h1 style="text-align:center;">{{ plans.count }} Plan{{ plans.count|pluralize }}</h1>
+            {% else %}
+            <h1> Current Plan</h1>
+            {% endif %}
+        </div>
+    </div>
+    <h2>Experience the difference</h2>
+    <h4>Go Premium and enjoy full control of your listening. Cancel anytime.</h4>
+    </div>
+    {% if plans %}
+    <div class="row " style="color: black; " >
+        
+        {% for plan in plans %}
+        <div class="col-sm-3 col-lg-4">
+            
+            <div class="card text-white border-secondary mb-3 bg-dark mb-3 mt-5 ml-5 mx-auto" style="width: 18rem; height: 20rem;">
+                
+                    <div class="card-header bg-transparent border-secondary text-center">{{plan.planname}}</div>
+                    <div class="card-body  text-white">
+                      <h5 class="card-title">{{plan.details}}</h5>
+                      <p class="card-text">Price: {{plan.plan_price}}</p>
+                      <p class="card-text">Validity:{{plan.validity}} days</p>
+                    </div>
+                    
+                    <div class=" card-footer bg-transparent border-warning">
+                        <div class="row ">
+                            <div class="col">
+                                    <div class="d-flex align-items-center">
+                                        <a href="{% url 'viewplan' plan.pk %}"><button class="btn btn-block btn-primary mr-4">View</button></a>
+                                    
+                                    <form id="del-{{ plan.pk }}" action="{% url "deleteplan" plan.pk %}" method="POST" >
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-block ml-4" id="delete" type="button" onclick="confirmdelete({{ plan.pk }})">Delete</button> 
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+            </div>
+            
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div style="text-align: center;">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-10">
+                    <h1 style="text-center">No Plans</h1>
+                    <a href="{% url "createplan" %}"><button class="btn btn-primary">Create a Plan</button></a>
+                </div>
+            </div>
+        {% endif %}
+     
+        <script>
+            function confirmdelete(planPk) {
+                if (confirm("Are you sure you want to delete?")) {
+                    document.getElementById('del-' + planPk).submit();
+                } else {
+                    return false;
+                }
+            }
+        </script>
+        
+  
+    
+{% endblock %}
